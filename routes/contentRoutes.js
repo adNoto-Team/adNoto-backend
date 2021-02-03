@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 
-var content = require("../data/content.json");
+const Content = require("../models/content");
+const Season = require("../models/season");
+const Episode = require("../models/episode");
 
 router.get("/content/", (req, res) => {
 	res.send(content);
