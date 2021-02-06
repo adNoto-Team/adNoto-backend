@@ -17,7 +17,7 @@ const Comment = sequelize.define("comment", {
 		type: Sequelize.INTEGER,
 		allowNull: false,
 	},
-	isMovie: Sequelize.BOOLEAN,
+	episodeId: Sequelize.INTEGER,
 	text: Sequelize.TEXT,
 	isSpoiler: Sequelize.BOOLEAN,
 });
