@@ -5,8 +5,8 @@ const Content = require("../models/content");
 const Season = require("../models/season");
 const Episode = require("../models/episode");
 
-router.get("/content/", (req, res) => {
-	res.send(content);
+router.get("/feed", (req, res) => {
+	
 });
 
 router.get("/content/:id", (req, res) => {

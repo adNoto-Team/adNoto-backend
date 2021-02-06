@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
+const requireAuth = require("./middlewares/requireAuth");
+
 const basicRoutes = require("./routes/basicRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
@@ -9,6 +11,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const sequelize = require("./database/mysql");
 // const contentRoutes = require("./routes/contentRoutes");
 
+const User = require("./models/user");
 const Comment = require("./models/comment");
 const Content = require("./models/content");
 const Season = require("./models/season");
@@ -25,6 +28,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use(basicRoutes);
+app.use(requireAuth);
 app.use(commentRoutes);
 app.use(adminRoutes);
 
