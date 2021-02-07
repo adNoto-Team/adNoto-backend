@@ -1,13 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+const cors = require("cors");
 
 const requireAuth = require("./middlewares/requireAuth");
 
 const basicRoutes = require("./routes/basicRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
-
+const authRoutes = require("./routes/authRoutes");
 const sequelize = require("./database/mysql");
 // const contentRoutes = require("./routes/contentRoutes");
 
@@ -25,10 +26,14 @@ Episode.belongsTo(Season);
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 
 app.use(basicRoutes);
+app.use(authRoutes);
+//In routes below this line you got to put a bearer and jwt in your calls
 app.use(requireAuth);
+
 app.use(commentRoutes);
 app.use(adminRoutes);
 
