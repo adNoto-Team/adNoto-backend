@@ -2,12 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const Comment = require("../models/comment");
-
-router.get("/comment/", (req, res) => {
-	Comment.findAll().then((comments) => {
-		res.send(JSON.stringify(comments));
-	});
-});
+const Episode = require("../models/episode");
+const Content = require("../models/content");
 
 router.get("/comment/:id", (req, res) => {
 	Comment.findByPk(req.params.id).then((comment) => {
@@ -15,15 +11,52 @@ router.get("/comment/:id", (req, res) => {
 	});
 });
 
-router.post("/comment", (req, res) => {
-	const userId = req.body.userId;
-	const contentId = req.body.contentId;
-	const isMovie = req.body.isMovie;
-	const text = req.body.text;
+router.post("/comment/episode/:id", async (req, res) => {
+	const episode = await Episode.findByPk(req.params.id);
 
-	Comment.create({ userId, contentId, isMovie, text }).then((response) => {
-		res.send(response);
+	const comment = await episode.createComment({
+		userId: req.user.id,
+		text: req.body.text,
+		isSpoiler: req.body.isSpoiler,
 	});
+
+	res.send(comment);
+	// Comment.create({ userId, contentId, isMovie, text }).then((response) => {
+	// 	res.send(response);
+	// });
+});
+router.get("/comment/episode/:id", async (req, res) => {
+	const episode = await Episode.findByPk(req.params.id);
+
+	const comments = await episode.getComments();
+	res.send(comments);
+	// Comment.create({ userId, contentId, isMovie, text }).then((response) => {
+	// 	res.send(response);
+	// });
+});
+
+router.post("/comment/content/:id", async (req, res) => {
+	const content = await Content.findByPk(req.params.id);
+
+	const comment = await content.createComment({
+		userId: req.user.id,
+		text: req.body.text,
+		isSpoiler: req.body.isSpoiler,
+	});
+
+	res.send(comment);
+	// Comment.create({ userId, contentId, isMovie, text }).then((response) => {
+	// 	res.send(response);
+	// });
+});
+router.get("/comment/content/:id", async (req, res) => {
+	const content = await Content.findByPk(req.params.id);
+
+	const comments = await content.getComments();
+	res.send(comments);
+	// Comment.create({ userId, contentId, isMovie, text }).then((response) => {
+	// 	res.send(response);
+	// });
 });
 
 module.exports = router;

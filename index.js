@@ -24,6 +24,13 @@ Season.belongsTo(Content);
 Season.hasMany(Episode);
 Episode.belongsTo(Season);
 
+Content.hasMany(Comment);
+Episode.hasMany(Comment);
+Comment.belongsTo(Content);
+Comment.belongsTo(Episode);
+User.hasMany(Comment);
+Comment.belongsTo(User);
+
 const app = express();
 
 app.use(cors());
