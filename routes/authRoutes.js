@@ -60,7 +60,7 @@ router.post("/signup", async (req, res) => {
 					} else if (!created && user && !user._options.isNewRecord) {
 						res.send({
 							created: false,
-							message: "User already exists!",
+							message: "User or email already exists!",
 						});
 					} else {
 						res.send({ created, message: "ERROR", error: true });

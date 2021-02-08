@@ -10,12 +10,18 @@ router.get("/feed", (req, res) => {});
 router.get("/content/:id", async (req, res) => {
 	const content = await Content.findByPk(req.params.id);
 	const seasons = [];
-	for await (const season of content.getSeason()) {
-		const episodes = [];
+	let episodes = [];
+	let ListOfSeasons = await content.getSeasons();
+	for await (const season of ListOfSeasons) {
+		episodes = [];
+		let ListOfEpisodes = await season.getEpisodes();
+		for await (const episode of ListOfEpisodes) {
+			episodes.push(episode);
+		}
 
-		seasons.push(season.dataValues);
+		seasons.push({ ...season.dataValues, episodes });
 	}
-	res.send(content);
+	res.send({ ...content.dataValues, seasons });
 });
 
 module.exports = router;
