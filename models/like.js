@@ -2,23 +2,21 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../database/mysql");
 
-const Comment = sequelize.define("comment", {
+const Like = sequelize.define("like", {
 	id: {
 		type: Sequelize.INTEGER,
 		autoIncrement: true,
 		allowNull: false,
 		primaryKey: true,
 	},
+	commentId: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+	},
 	userId: {
 		type: Sequelize.INTEGER,
 		allowNull: false,
 	},
-	contentId: {
-		type: Sequelize.INTEGER,
-	},
-	episodeId: Sequelize.INTEGER,
-	text: Sequelize.TEXT,
-	isSpoiler: Sequelize.BOOLEAN,
 });
 
-module.exports = Comment;
+module.exports = Like;

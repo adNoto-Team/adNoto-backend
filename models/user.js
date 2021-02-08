@@ -2,27 +2,33 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../database/mysql");
 
-const Content = sequelize.define("content", {
+const User = sequelize.define("user", {
 	id: {
 		type: Sequelize.INTEGER,
 		autoIncrement: true,
 		allowNull: false,
 		primaryKey: true,
 	},
+	username: {
+		type: Sequelize.TEXT,
+		allowNull: false,
+	},
+	password: {
+		type: Sequelize.TEXT,
+		allowNull: false,
+	},
 	name: {
 		type: Sequelize.TEXT,
 		allowNull: false,
 	},
-	avatar: {
+	surname: {
 		type: Sequelize.TEXT,
 		allowNull: false,
 	},
-	coverPicture: Sequelize.TEXT,
-	desc: Sequelize.TEXT,
-	director: Sequelize.TEXT,
-	trailer: Sequelize.TEXT,
-	startDate: Sequelize.DATE,
-	endDate: Sequelize.DATE,
+	mail: {
+		type: Sequelize.TEXT,
+		allowNull: false,
+	},
 });
 
-module.exports = Content;
+module.exports = User;
