@@ -15,7 +15,6 @@ const Comment = sequelize.define("comment", {
 	},
 	contentId: {
 		type: Sequelize.INTEGER,
-		allowNull: false,
 	},
 	episodeId: Sequelize.INTEGER,
 	text: Sequelize.TEXT,
