@@ -23,9 +23,6 @@ router.post("/comment/episode/:id", async (req, res) => {
 	});
 
 	res.send(comment);
-	// Comment.create({ userId, contentId, isMovie, text }).then((response) => {
-	// 	res.send(response);
-	// });
 });
 router.get("/comment/episode/:id", async (req, res) => {
 	const episode = await Episode.findByPk(req.params.id);
@@ -42,7 +39,6 @@ router.get("/comment/episode/:id", async (req, res) => {
 				commentId: comment.id,
 			},
 		});
-		console.log(likes[0].dataValues.likes);
 		result.push({
 			comment: comment.dataValues,
 			like: likes[0].dataValues.likes,
