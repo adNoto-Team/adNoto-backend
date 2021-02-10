@@ -21,8 +21,9 @@ const Content = sequelize.define("content", {
 	desc: Sequelize.TEXT,
 	director: Sequelize.TEXT,
 	trailer: Sequelize.TEXT,
-	startDate: Sequelize.DATE,
-	endDate: Sequelize.DATE,
+	startDate: Sequelize.TEXT,
+	endDate: Sequelize.TEXT,
+	imbdScore: Sequelize.INTEGER,
 });
 
 module.exports = Content;

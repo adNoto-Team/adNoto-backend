@@ -22,6 +22,7 @@ const Season = require("./models/season");
 const Episode = require("./models/episode");
 const Like = require("./models/like");
 const WatchLater = require("./models/watchLater");
+const Watched = require("./models/watched");
 
 Content.hasMany(Season);
 Season.belongsTo(Content);
@@ -47,6 +48,11 @@ WatchLater.belongsTo(Content);
 User.hasMany(WatchLater);
 WatchLater.belongsTo(User);
 
+Episode.hasMany(Watched);
+Watched.belongsTo(Episode);
+User.hasMany(Watched);
+Watched.belongsTo(User);
+
 const app = express();
 
 app.use("/uploads", express.static("uploads"));
@@ -68,7 +74,7 @@ app.use(watchLaterRoutes);
 app.listen(process.env.PORT, () => {
 	sequelize
 		.sync({
-			//  force: true
+			// force: true,
 		})
 		.then(() => {
 			console.log(`Hello Server is running at ${process.env.PORT}`);
