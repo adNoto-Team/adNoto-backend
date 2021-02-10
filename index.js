@@ -15,6 +15,7 @@ const likeRoutes = require("./routes/likeRoutes");
 const contentRoutes = require("./routes/contentRoutes");
 const watchLaterRoutes = require("./routes/watchLaterRoutes");
 const userRoutes = require("./routes/userRoutes");
+const userAvatarRoutes = require("./routes/userAvatarRoutes");
 
 const User = require("./models/user");
 const Comment = require("./models/comment");
@@ -72,6 +73,7 @@ app.use("/admin", adminRoutes);
 app.use(likeRoutes);
 app.use(watchLaterRoutes);
 app.use(userRoutes);
+app.use(userAvatarRoutes);
 
 app.listen(process.env.PORT, () => {
 	sequelize
