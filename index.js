@@ -13,6 +13,7 @@ const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 const likeRoutes = require("./routes/likeRoutes");
 const contentRoutes = require("./routes/contentRoutes");
+const watchLaterRoutes = require("./routes/watchLaterRoutes");
 
 const User = require("./models/user");
 const Comment = require("./models/comment");
@@ -20,6 +21,7 @@ const Content = require("./models/content");
 const Season = require("./models/season");
 const Episode = require("./models/episode");
 const Like = require("./models/like");
+const WatchLater = require("./models/watchLater");
 
 Content.hasMany(Season);
 Season.belongsTo(Content);
@@ -40,6 +42,11 @@ Like.belongsTo(Comment);
 User.hasMany(Like);
 Like.belongsTo(User);
 
+Content.hasMany(WatchLater);
+WatchLater.belongsTo(Content);
+User.hasMany(WatchLater);
+WatchLater.belongsTo(User);
+
 const app = express();
 
 app.use("/uploads", express.static("uploads"));
@@ -56,6 +63,7 @@ app.use(requireAuth);
 app.use(commentRoutes);
 app.use("/admin", adminRoutes);
 app.use(likeRoutes);
+app.use(watchLaterRoutes);
 
 app.listen(process.env.PORT, () => {
 	sequelize
