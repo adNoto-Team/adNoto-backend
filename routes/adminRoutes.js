@@ -11,9 +11,7 @@ const storage = multer.diskStorage({
 		cb(null, "uploads/");
 	},
 	filename: (req, file, cb) => {
-		const name = `pic${req.params.id}-${Math.floor(Math.random() * 500)}-${
-			file.originalname
-		}`;
+		const name = `pic${req.params.id}-${Date.now()}-${file.originalname}`;
 		cb(null, name);
 	},
 });
@@ -22,9 +20,7 @@ const storage2 = multer.diskStorage({
 		cb(null, "uploads/");
 	},
 	filename: (req, file, cb) => {
-		const name = `bg${req.params.id}-${Math.floor(Math.random() * 500)}-${
-			file.originalname
-		}`;
+		const name = `bg${req.params.id}-${Date.now()}-${file.originalname}`;
 		cb(null, name);
 	},
 });
@@ -138,10 +134,6 @@ router.post("/content/all", upload.single("avatarPic"), (req, res) => {
 		.then((a) => {
 			res.send("Complete!");
 		});
-});
-
-router.get("/content/:id", (req, res) => {
-	res.send(content[req.params.id]);
 });
 
 module.exports = router;
