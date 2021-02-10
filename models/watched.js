@@ -2,14 +2,14 @@ const Sequelize = require("sequelize");
 
 const sequelize = require("../database/mysql");
 
-const WatchLater = sequelize.define("watchLater", {
+const Watched = sequelize.define("watched", {
 	id: {
 		type: Sequelize.INTEGER,
 		autoIncrement: true,
 		allowNull: false,
 		primaryKey: true,
 	},
-	contentId: {
+	episodeId: {
 		type: Sequelize.INTEGER,
 		allowNull: false,
 	},
@@ -17,10 +17,6 @@ const WatchLater = sequelize.define("watchLater", {
 		type: Sequelize.INTEGER,
 		allowNull: false,
 	},
-	watched: {
-		type: Sequelize.BOOLEAN,
-		allowNull: false,
-	},
 });
 
-module.exports = WatchLater;
+module.exports = Watched;
