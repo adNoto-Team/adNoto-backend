@@ -14,6 +14,14 @@ router.get("/feed", async (req, res) => {
 	});
 	res.send(result);
 });
+router.get("/content/random", async (req, res) => {
+	const result = await Content.findAll({
+		order: sequelize.literal("rand()"),
+		limit: 1,
+	});
+
+	res.send(result[0]);
+});
 
 router.get("/content/:id", async (req, res) => {
 	const content = await Content.findByPk(req.params.id);
