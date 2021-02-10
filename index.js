@@ -42,6 +42,8 @@ Like.belongsTo(User);
 
 const app = express();
 
+app.use("/uploads", express.static("uploads"));
+
 app.use(cors());
 app.use(bodyParser.json());
 
