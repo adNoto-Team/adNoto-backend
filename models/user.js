@@ -29,6 +29,7 @@ const User = sequelize.define("user", {
 		type: Sequelize.TEXT,
 		allowNull: false,
 	},
+	avatar: Sequelize.TEXT,
 });
 
 module.exports = User;
