@@ -21,7 +21,8 @@ router.get("/content/:id", async (req, res) => {
 
 		seasons.push({ ...season.dataValues, episodes });
 	}
-	res.send({ ...content.dataValues, seasons });
+	const comments = await content.getComments();
+	res.send({ ...content.dataValues, seasons, comments });
 });
 
 module.exports = router;
