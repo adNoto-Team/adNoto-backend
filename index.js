@@ -13,6 +13,9 @@ const adminRoutes = require("./routes/adminRoutes");
 const authRoutes = require("./routes/authRoutes");
 const likeRoutes = require("./routes/likeRoutes");
 const contentRoutes = require("./routes/contentRoutes");
+const watchLaterRoutes = require("./routes/watchLaterRoutes");
+const userRoutes = require("./routes/userRoutes");
+const userAvatarRoutes = require("./routes/userAvatarRoutes");
 
 const User = require("./models/user");
 const Comment = require("./models/comment");
@@ -20,6 +23,8 @@ const Content = require("./models/content");
 const Season = require("./models/season");
 const Episode = require("./models/episode");
 const Like = require("./models/like");
+const WatchLater = require("./models/watchLater");
+const Watched = require("./models/watched");
 
 Content.hasMany(Season);
 Season.belongsTo(Content);
@@ -40,7 +45,19 @@ Like.belongsTo(Comment);
 User.hasMany(Like);
 Like.belongsTo(User);
 
+Content.hasMany(WatchLater);
+WatchLater.belongsTo(Content);
+User.hasMany(WatchLater);
+WatchLater.belongsTo(User);
+
+Episode.hasMany(Watched);
+Watched.belongsTo(Episode);
+User.hasMany(Watched);
+Watched.belongsTo(User);
+
 const app = express();
+
+app.use("/uploads", express.static("uploads"));
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -54,11 +71,14 @@ app.use(requireAuth);
 app.use(commentRoutes);
 app.use("/admin", adminRoutes);
 app.use(likeRoutes);
+app.use(watchLaterRoutes);
+app.use(userRoutes);
+app.use(userAvatarRoutes);
 
 app.listen(process.env.PORT, () => {
 	sequelize
 		.sync({
-			//  force: true
+			// force: true,
 		})
 		.then(() => {
 			console.log(`Hello Server is running at ${process.env.PORT}`);

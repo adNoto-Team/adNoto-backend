@@ -1,11 +1,89 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
 
 const Content = require("../models/content");
 const Season = require("../models/season");
 const Episode = require("../models/episode");
 
-router.post("/content/all", (req, res) => {
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "uploads/");
+	},
+	filename: (req, file, cb) => {
+		const name = `pic${req.params.id}-${Date.now()}-${file.originalname}`;
+		cb(null, name);
+	},
+});
+const storage2 = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "uploads/");
+	},
+	filename: (req, file, cb) => {
+		const name = `bg${req.params.id}-${Date.now()}-${file.originalname}`;
+		cb(null, name);
+	},
+});
+const fileFilter = (req, file, cb) => {
+	if (file.mimetype === "image/png" || file.mimetype === "image/jpeg") {
+		cb(null, true);
+	} else {
+		cb(null, false);
+	}
+};
+const upload = multer({
+	storage: storage,
+	limits: {
+		fileSize: 1024 * 1024 * 5,
+	},
+	fileFilter: fileFilter,
+});
+const uploadBg = multer({
+	storage: storage2,
+	limits: {
+		fileSize: 1024 * 1024 * 5,
+	},
+	fileFilter: fileFilter,
+});
+router.post(
+	"/content/img/:id",
+	upload.single("avatarPic"),
+	async (req, res) => {
+		const file = req.file;
+		console.log(file);
+		if (file) {
+			const content = await Content.findByPk(req.params.id);
+			content.avatar = file.destination + file.filename;
+			await content.save();
+
+			res.send({ complete: true });
+		} else {
+			res.send({
+				complete: "false",
+			});
+		}
+	}
+);
+router.post(
+	"/content/coverimg/:id",
+	uploadBg.single("coverPic"),
+	async (req, res) => {
+		const file = req.file;
+
+		if (file) {
+			const content = await Content.findByPk(req.params.id);
+			content.coverPicture = file.destination + file.filename;
+			await content.save();
+
+			res.send({ complete: true });
+		} else {
+			res.send({
+				complete: "false",
+			});
+		}
+	}
+);
+router.post("/content/all", upload.single("avatarPic"), (req, res) => {
 	const vars = req.body;
 
 	Content.create({
@@ -56,10 +134,6 @@ router.post("/content/all", (req, res) => {
 		.then((a) => {
 			res.send("Complete!");
 		});
-});
-
-router.get("/content/:id", (req, res) => {
-	res.send(content[req.params.id]);
 });
 
 module.exports = router;

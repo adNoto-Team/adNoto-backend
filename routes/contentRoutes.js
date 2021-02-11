@@ -4,8 +4,24 @@ const router = express.Router();
 const Content = require("../models/content");
 const Season = require("../models/season");
 const Episode = require("../models/episode");
+const Comment = require("../models/comment");
 
-router.get("/feed", (req, res) => {});
+const sequelize = require("sequelize");
+
+router.get("/feed", async (req, res) => {
+	const result = await Content.findAll({
+		order: [[sequelize.literal("updatedAt"), "DESC"]],
+	});
+	res.send(result);
+});
+router.get("/content/random", async (req, res) => {
+	const result = await Content.findAll({
+		order: sequelize.literal("rand()"),
+		limit: 1,
+	});
+
+	res.send(result[0]);
+});
 
 router.get("/content/:id", async (req, res) => {
 	const content = await Content.findByPk(req.params.id);
@@ -21,7 +37,8 @@ router.get("/content/:id", async (req, res) => {
 
 		seasons.push({ ...season.dataValues, episodes });
 	}
-	res.send({ ...content.dataValues, seasons });
+	const comments = await content.getComments();
+	res.send({ ...content.dataValues, seasons, comments });
 });
 
 module.exports = router;
