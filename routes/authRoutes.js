@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 
 const bcrypt = require("bcrypt");
 
-const User = require("../models/User");
+const User = require("../models/user");
 
 router.post("/signup", async (req, res) => {
 	if (
