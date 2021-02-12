@@ -6,6 +6,7 @@ const Comment = require("../models/comment");
 const Episode = require("../models/episode");
 const Content = require("../models/content");
 const Like = require("../models/like");
+const User = require("../models/user");
 
 router.get("/comment/:id", (req, res) => {
 	Comment.findByPk(req.params.id).then((comment) => {
@@ -39,13 +40,20 @@ router.get("/comment/episode/:id", async (req, res) => {
 				commentId: comment.id,
 			},
 		});
+		const user = await User.findByPk(comment.userId);
 		result.push({
 			comment: comment.dataValues,
 			like: likes[0].dataValues.likes,
+			user: {
+				username: user.dataValues.username,
+				avatar: user.dataValues.avatar,
+			},
 		});
 	}
-
-	res.send(result);
+	const watchedEp = await req.user.getWatcheds({
+		where: { userId: req.user.id, episodeId: req.params.id },
+	});
+	res.send({ result, watched: watchedEp.length > 0 ? true : false });
 });
 
 router.post("/comment/content/:id", async (req, res) => {
@@ -76,10 +84,15 @@ router.get("/comment/content/:id", async (req, res) => {
 				commentId: comment.id,
 			},
 		});
+		const user = await User.findByPk(comment.userId);
 		console.log(likes[0].dataValues.likes);
 		result.push({
 			comment: comment.dataValues,
 			like: likes[0].dataValues.likes,
+			user: {
+				username: user.dataValues.username,
+				avatar: user.dataValues.avatar,
+			},
 		});
 	}
 

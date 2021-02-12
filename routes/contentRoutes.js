@@ -10,10 +10,13 @@ const sequelize = require("sequelize");
 
 router.get("/feed", async (req, res) => {
 	const result = await Content.findAll({
-		order: [[sequelize.literal("updatedAt"), "DESC"]],
+		// order: [[sequelize.literal("updatedAt"), "DESC"]],
+		order: sequelize.literal("rand()"),
+		limit: 20,
 	});
 	res.send(result);
 });
+
 router.get("/content/random", async (req, res) => {
 	const result = await Content.findAll({
 		order: sequelize.literal("rand()"),
@@ -38,7 +41,19 @@ router.get("/content/:id", async (req, res) => {
 		seasons.push({ ...season.dataValues, episodes });
 	}
 	const comments = await content.getComments();
-	res.send({ ...content.dataValues, seasons, comments });
+
+	const watchLater = await req.user.getWatchLaters({
+		where: {
+			contentId: req.params.id,
+		},
+	});
+
+	res.send({
+		...content.dataValues,
+		seasons,
+		comments,
+		watched: watchLater.lenght > 0 ? watchLater[0] : null,
+	});
 });
 
 module.exports = router;

@@ -30,6 +30,7 @@ const User = sequelize.define("user", {
 		allowNull: false,
 	},
 	avatar: Sequelize.TEXT,
+	desc: Sequelize.TEXT,
 });
 
 module.exports = User;

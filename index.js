@@ -64,9 +64,9 @@ app.use(bodyParser.json());
 
 app.use(basicRoutes);
 app.use(authRoutes);
+app.use(requireAuth);
 app.use(contentRoutes);
 //In routes below this line you got to put a bearer and jwt in your calls
-app.use(requireAuth);
 
 app.use(commentRoutes);
 app.use("/admin", adminRoutes);
@@ -78,7 +78,7 @@ app.use(userAvatarRoutes);
 app.listen(process.env.PORT, () => {
 	sequelize
 		.sync({
-			// force: true,
+			//force: true,
 		})
 		.then(() => {
 			console.log(`Hello Server is running at ${process.env.PORT}`);
