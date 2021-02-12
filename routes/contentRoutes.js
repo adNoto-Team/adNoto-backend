@@ -50,6 +50,7 @@ router.get("/content/:id", async (req, res) => {
 			"text",
 			"contentId",
 			"episodeId",
+			"isSpoiler",
 			"userId",
 			[sequelize.fn("COUNT", sequelize.col("likes.commentId")), "liked"],
 		],
