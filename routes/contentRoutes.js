@@ -5,6 +5,7 @@ const Content = require("../models/content");
 const Season = require("../models/season");
 const Episode = require("../models/episode");
 const Comment = require("../models/comment");
+const Like = require("../models/like");
 
 const sequelize = require("sequelize");
 const User = require("../models/user");
@@ -41,7 +42,24 @@ router.get("/content/:id", async (req, res) => {
 
 		seasons.push({ ...season.dataValues, episodes });
 	}
-	const comments = await content.getComments();
+	const comments = await content.getComments({
+		group: ["comment.id"],
+
+		attributes: [
+			"id",
+			"text",
+			"contentId",
+			"episodeId",
+			"userId",
+			[sequelize.fn("COUNT", sequelize.col("likes.commentId")), "liked"],
+		],
+		includeIgnoreAttributes: false,
+		include: [
+			{
+				model: Like,
+			},
+		],
+	});
 	const commentsArr = [];
 	for await (const comment of comments) {
 		const user = await User.findByPk(comment.userId);
