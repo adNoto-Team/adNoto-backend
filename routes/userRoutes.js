@@ -224,6 +224,7 @@ router.get("/profile", async (req, res) => {
 			commentArr,
 			watchingArr,
 			willWatchArr,
+			watchedContentArr,
 			commentNum,
 		});
 	} catch (e) {
