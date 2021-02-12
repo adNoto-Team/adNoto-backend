@@ -7,6 +7,7 @@ const Episode = require("../models/episode");
 const Comment = require("../models/comment");
 
 const sequelize = require("sequelize");
+const User = require("../models/user");
 
 router.get("/feed", async (req, res) => {
 	const result = await Content.findAll({
@@ -41,6 +42,17 @@ router.get("/content/:id", async (req, res) => {
 		seasons.push({ ...season.dataValues, episodes });
 	}
 	const comments = await content.getComments();
+	const commentsArr = [];
+	for await (const comment of comments) {
+		const user = await User.findByPk(comment.userId);
+		commentsArr.push({
+			comment,
+			user: {
+				username: user.username,
+				avatar: user.avatar,
+			},
+		});
+	}
 
 	const watchLater = await req.user.getWatchLaters({
 		where: {
@@ -51,7 +63,7 @@ router.get("/content/:id", async (req, res) => {
 	res.send({
 		...content.dataValues,
 		seasons,
-		comments,
+		commentsArr,
 		watched: watchLater.lenght > 0 ? watchLater[0] : null,
 	});
 });
