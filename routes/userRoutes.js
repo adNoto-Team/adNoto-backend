@@ -127,6 +127,7 @@ router.get("/profile", async (req, res) => {
 			],
 			where: {
 				userId: req.user.id,
+				isSpoiler: false,
 			},
 			attributes: [
 				"id",
@@ -156,10 +157,12 @@ router.get("/profile", async (req, res) => {
 			} else {
 				content = await Content.findByPk(comment.contentId);
 			}
-			commentArr.push({
-				comment: comment.dataValues,
-				content: content.dataValues,
-			});
+			if (commentArr.length < 5) {
+				commentArr.push({
+					comment: comment.dataValues,
+					content: content.dataValues,
+				});
+			}
 		}
 
 		const watching = await Watched.findAll({
@@ -179,8 +182,10 @@ router.get("/profile", async (req, res) => {
 			});
 		}
 		const willWatch = await WatchLater.findAll({
+			limit: 4,
 			where: {
 				userId: req.user.id,
+				watched: false,
 			},
 		});
 		const willWatchArr = [];
@@ -192,6 +197,22 @@ router.get("/profile", async (req, res) => {
 				content: content.dataValues,
 			});
 		}
+		const watchedContents = await WatchLater.findAll({
+			limit: 4,
+			where: {
+				userId: req.user.id,
+				watched: true,
+			},
+		});
+		const watchedContentArr = [];
+		for await (const watchedContent of watchedContents) {
+			content = await Content.findByPk(watchedContent.contentId);
+			watchedContentArr.push({
+				willWatch: watchedContent.dataValues,
+				content: content.dataValues,
+			});
+		}
+
 		const commentNum = await Comment.count({
 			where: { userId: req.user.id },
 		});
