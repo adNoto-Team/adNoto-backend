@@ -42,8 +42,11 @@ router.get("/comment/episode/:id", async (req, res) => {
 		});
 		const user = await User.findByPk(comment.userId);
 		result.push({
-			comment: comment.dataValues,
-			like: likes[0].dataValues.likes,
+			comment: {
+				...comment.dataValues,
+
+				liked: likes[0].dataValues.likes,
+			},
 			user: {
 				username: user.dataValues.username,
 				avatar: user.dataValues.avatar,
@@ -53,7 +56,7 @@ router.get("/comment/episode/:id", async (req, res) => {
 	const watchedEp = await req.user.getWatcheds({
 		where: { userId: req.user.id, episodeId: req.params.id },
 	});
-	res.send({ result, watched: watchedEp.length > 0 ? true : false });
+	res.send({ ...result, watched: watchedEp.length > 0 ? true : false });
 });
 
 router.post("/comment/content/:id", async (req, res) => {
@@ -87,8 +90,10 @@ router.get("/comment/content/:id", async (req, res) => {
 		const user = await User.findByPk(comment.userId);
 		console.log(likes[0].dataValues.likes);
 		result.push({
-			comment: comment.dataValues,
-			like: likes[0].dataValues.likes,
+			comment: {
+				...comment.dataValues,
+				liked: likes[0].dataValues.likes,
+			},
 			user: {
 				username: user.dataValues.username,
 				avatar: user.dataValues.avatar,
